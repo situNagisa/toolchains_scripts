@@ -70,15 +70,18 @@ function build_target()
 		fi
 	fi
 	echo "$SRC_DIR/configure $CONFIGURE $TRIPLETS --prefix=$PREFIX_DIR"
-	make -j$(nproc)
-	if [ $? -ne 0 ]; then
-		echo "fail to make $SOFT"
-		exit 1
-	fi
-	make install-strip -j$(nproc)
-	if [ $? -ne 0 ]; then
-		echo "fail to install $SOFT"
-		exit 1
+
+	if [ ! -d $PREFIX_DIR/lib/bfd-plugins ];then
+		make -j$(nproc)
+		if [ $? -ne 0 ]; then
+			echo "fail to make $SOFT"
+			exit 1
+		fi
+		make install-strip -j$(nproc)
+		if [ $? -ne 0 ]; then
+			echo "fail to install $SOFT"
+			exit 1
+		fi
 	fi
 }
 
